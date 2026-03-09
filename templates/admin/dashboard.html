@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Dashboard</title>
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+
+body{
+background:url("/static/bg.jpg") no-repeat center center fixed;
+background-size:cover;
+font-family:'Segoe UI',sans-serif;
+}
+
+.card{
+border-radius:20px;
+box-shadow:0 8px 20px rgba(0,0,0,0.3);
+transition:transform .3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+h3{
+color:#fff;
+text-shadow:1px 1px 4px rgba(0,0,0,0.6);
+}
+
+#clock{
+font-size:18px;
+font-weight:bold;
+color:#fff;
+text-shadow:2px 2px 6px rgba(0,0,0,0.8);
+}
+
+footer{
+background:#075468;
+color:#fff;
+padding:10px;
+}
+
+.carousel img{
+height:300px;
+object-fit:cover;
+border-radius:15px;
+}
+
+#map{
+width:100%;
+height:350px;
+border-radius:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<div class="container-fluid">
+
+<a class="navbar-brand fw-bold">🏠 Dashboard</a>
+
+<div class="navbar-nav ms-auto">
+<a class="nav-link" href="/warga">Data Warga</a>
+<a class="nav-link" href="/statistik">Statistik</a>
+<a class="nav-link" href="/logout">Logout</a>
+</div>
+
+</div>
+</nav>
+
+<!-- HEADER -->
+<div class="card-header bg-primary text-white d-flex justify-content-between">
+<div class="d-flex align-items-center gap-3 w-100">
+
+<img src="/static/logo.png"
+class="rounded-circle"
+style="width:80px; box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+
+<h4 class="mb-0">
+Kp PASIR LUHUR RT 001 RW 010 DESA NANGGALAMEKAR
+</h4>
+
+<div id="clock" class="ms-auto"></div>
+
+</div>
+</div>
+
+<!-- SLIDE ALBUM -->
+<div class="container mt-3">
+
+
+<div class="carousel-inner">
+
+<div class="carousel-item active">
+<img src="{{ url_for('static', filename='vido1.gif') }}" class="d-block w-100">
+
+
+</div>
+
+<button class="carousel-control-prev"
+type="button"
+data-bs-target="#albumSlide"
+data-bs-slide="prev">
+
+<span class="carousel-control-prev-icon"></span>
+
+</button>
+
+<button class="carousel-control-next"
+type="button"
+data-bs-target="#albumSlide"
+data-bs-slide="next">
+
+<span class="carousel-control-next-icon"></span>
+
+</button>
+
+</div>
+</div>
+
+<!-- KONTEN -->
+<div class="container mt-4">
+
+<h3 class="text-center mb-4">
+Data Warga Kp Pasir Luhur RT 001 RW 010
+</h3>
+
+<div class="row g-4">
+
+<div class="col-md-4">
+<div class="card text-white text-center" style="background:linear-gradient(135deg,#ff9a9e,#fad0c4);">
+<div class="card-body">
+
+<h4><i class="bi bi-people-fill"></i> Total Warga</h4>
+<h2 id="totalWarga">{{ total }}</h2>
+
+</div>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card text-white text-center" style="background:linear-gradient(135deg,#56ab2f,#a8e063);">
+<div class="card-body">
+
+<h4><i class="bi bi-gender-male"></i> Laki-Laki</h4>
+<h2 id="lakiWarga">{{ laki }}</h2>
+
+</div>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card text-white text-center" style="background:linear-gradient(135deg,#ff416c,#ff4b2b);">
+<div class="card-body">
+
+<h4><i class="bi bi-gender-female"></i> Perempuan</h4>
+<h2 id="perempuanWarga">{{ perempuan }}</h2>
+
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- CHART -->
+<div class="card mt-4">
+<div class="card-body bg-light">
+
+<h4 class="text-center mb-3">Statistik Warga</h4>
+
+<div style="max-width:400px;margin:auto;">
+<canvas id="wargaChart"></canvas>
+</div>
+
+</div>
+</div>
+
+<!-- MAP -->
+<div class="card mt-4">
+<div class="card-body">
+
+<h4 class="text-center mb-3">
+📍 Lokasi Kampung
+</h4>
+
+<div id="map"></div>
+
+</div>
+</div>
+
+</div>
+
+<footer class="text-center mt-4">
+<small>&copy; 2026 pasirluhur@exvid</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.min.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded",function(){
+
+const ctx=document.getElementById('wargaChart').getContext('2d');
+
+new Chart(ctx,{
+type:'doughnut',
+data:{
+labels:['Laki-Laki','Perempuan'],
+datasets:[{
+data:[{{ laki|safe }},{{ perempuan|safe }}],
+backgroundColor:['#28a745','#dc3545'],
+borderWidth:2
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{legend:{position:'bottom'}}
+}
+});
+
+new CountUp('totalWarga',{{ total|safe }}).start();
+new CountUp('lakiWarga',{{ laki|safe }}).start();
+new CountUp('perempuanWarga',{{ perempuan|safe }}).start();
+
+function updateClock(){
+const now=new Date();
+
+const date=now.toLocaleDateString('id-ID',{
+weekday:'long',
+year:'numeric',
+month:'long',
+day:'numeric'
+});
+
+const time=now.toLocaleTimeString('id-ID',{
+hour:'2-digit',
+minute:'2-digit',
+second:'2-digit'
+});
+
+document.getElementById('clock').innerHTML=date+" | "+time;
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+});
+
+</script>
+
+<!-- GOOGLE MAP -->
+<script>
+
+function initMap(){
+
+const lokasi={
+lat:-6.834535,
+lng:107.2530215
+};
+
+const map=new google.maps.Map(document.getElementById("map"),{
+zoom:15,
+center:lokasi
+});
+
+new google.maps.Marker({
+position:lokasi,
+map:map,
+title:"Kp Pasir Luhur"
+});
+
+}
+
+</script>
+
+<script async
+src="https://maps.googleapis.com/maps/api/js?callback=initMap">
+</script>
+
+</body>
+</html>

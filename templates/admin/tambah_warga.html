@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>Tambah Warga</h2>
+
+<form method="post">
+
+No KK<br>
+<input name="no_kk"><br>
+
+NIK<br>
+<input name="nik"><br>
+
+Nama<br>
+<input name="nama"><br>
+
+Tanggal Lahir<br>
+<input name="tanggal_lahir"><br>
+
+Umur<br>
+<input name="umur"><br>
+
+Pekerjaan<br>
+<input name="pekerjaan"><br>
+
+Pendidikan<br>
+<input name="pendidikan"><br>
+
+Jenis kelamin<br>
+<select name="jk">
+<option value="L">Laki-laki</option>
+<option value="P">Perempuan</option>
+</select>
+
+Alamat<br>
+<textarea name="alamat"></textarea>
+
+<br><br>
+
+<button type="submit">Simpan</button>
+
+</form>
+
+{% endblock %}

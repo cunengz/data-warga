@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+
+<!-- WAJIB untuk mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Edit Data Warga</title>
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<style>
+
+body{
+background-image:url("/static/bg.jpg");
+background-size:cover;
+background-attachment:fixed;
+font-family:'Segoe UI',sans-serif;
+}
+
+.card{
+background:rgba(255,255,255,0.95);
+border-radius:15px;
+box-shadow:0 8px 20px rgba(0,0,0,0.3);
+}
+
+@media (max-width:576px){
+.card{
+padding:15px;
+}
+h3{
+font-size:20px;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container py-4">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-6 col-md-8 col-12">
+
+<div class="card p-4">
+
+<h3 class="text-primary mb-3 text-center">
+✏️ Edit Data Warga
+</h3>
+
+<form method="POST">
+
+<div class="mb-3">
+<label class="form-label">Nama</label>
+<input type="text"
+name="nama"
+class="form-control"
+value="{{ warga.nama }}"
+required>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Tanggal Lahir</label>
+<input type="date"
+name="tanggal_lahir"
+class="form-control"
+<input type="date"
+name="tanggal_lahir"
+class="form-control"
+value="{{ warga.tanggal_lahir }}"
+required>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Jenis Kelamin</label>
+
+<select name="jenis_kelamin" class="form-select">
+
+<option value="Laki-laki"
+{% if warga.jenis_kelamin == "Laki-laki" %}selected{% endif %}>
+Laki-laki
+</option>
+
+<option value="Perempuan"
+{% if warga.jenis_kelamin == "Perempuan" %}selected{% endif %}>
+Perempuan
+</option>
+
+</select>
+
+</div>
+
+<div class="mb-3">
+<label class="form-label">Pekerjaan</label>
+<input type="text"
+name="pekerjaan"
+class="form-control"
+value="{{ warga.pekerjaan }}">
+</div>
+
+<div class="mb-3">
+<label class="form-label">Pendidikan</label>
+
+<select name="pendidikan" class="form-select">
+
+<option value="SD" {% if warga.pendidikan == "SD" %}selected{% endif %}>SD</option>
+<option value="SMP" {% if warga.pendidikan == "SMP" %}selected{% endif %}>SMP</option>
+<option value="SMA" {% if warga.pendidikan == "SMA" %}selected{% endif %}>SMA</option>
+<option value="Diploma" {% if warga.pendidikan == "Diploma" %}selected{% endif %}>Diploma</option>
+<option value="Sarjana" {% if warga.pendidikan == "Sarjana" %}selected{% endif %}>Sarjana</option>
+
+</select>
+
+</div>
+
+<div class="d-grid gap-2">
+    <button type="submit" class="btn btn-success">
+        💾 Simpan
+    </button>
+
+    <a href="{{ url_for('warga') }}" class="btn btn-secondary">
+        ↩ Kembali
+    </a>
+</div>
+</a>
+
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+</div>
+
+</body>
+</html>

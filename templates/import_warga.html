@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h3>Import Data Warga dari Excel</h3>
+
+<form method="POST" enctype="multipart/form-data">
+
+<div class="mb-3">
+
+<input type="file" name="file" class="form-control" required>
+
+</div>
+
+<button type="submit" class="btn btn-primary">
+
+Import Excel
+
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

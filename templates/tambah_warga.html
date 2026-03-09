@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>Tambah Data Warga</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+Nomor KK
+<input type="text" name="no_kk">
+
+NIK
+<input type="text" name="nik">
+
+Nama
+<input type="text" name="nama">
+
+Alamat
+<input type="text" name="alamat">
+
+Umur
+<input type="number" name="umur">
+
+Jenis Kelamin
+<select name="jenis_kelamin">
+<option>Laki-laki</option>
+<option>Perempuan</option>
+</select>
+
+Pekerjaan
+<input type="text" name="pekerjaan">
+
+Pendidikan
+<input type="text" name="pendidikan">
+
+Upload Foto KTP
+<input type="file" name="foto">
+
+<br><br>
+
+<button type="submit">Simpan</button>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Statistik Warga</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+
+  <div class="mb-3 text-center">
+    <a href="/dashboard" class="btn btn-primary">🏠 Dashboard</a>
+    <a href="/warga" class="btn btn-success">👥 Data Warga</a>
+  </div>
+
+  <div class="text-center mb-4">
+    <h3>Statistik Warga Kp Pasir Luhur</h3>
+  </div>
+
+  <div class="row text-center mb-4">
+    <div class="col-md-4"><div class="card"><div class="card-body"><h5>Total Warga</h5><h2>{{ total }}</h2></div></div></div>
+    <div class="col-md-4"><div class="card"><div class="card-body"><h5>Laki-Laki</h5><h2>{{ laki }}</h2></div></div></div>
+    <div class="col-md-4"><div class="card"><div class="card-body"><h5>Perempuan</h5><h2>{{ perempuan }}</h2></div></div></div>
+  </div>
+
+  <div class="card mb-4"><div class="card-body"><h5>Distribusi Gender</h5><canvas id="genderChart"></canvas></div></div>
+  <div class="card mb-4"><div class="card-body"><h5>Distribusi Pendidikan</h5><canvas id="pendidikanChart"></canvas></div></div>
+  <div class="card mb-4"><div class="card-body"><h5>Distribusi Usia</h5><canvas id="usiaChart"></canvas></div></div>
+
+  <div class="card mb-4"><div class="card-body">
+    <h5>Persentase Pendidikan SMA</h5>
+    <div class="progress" style="height:25px;">
+      <div class="progress-bar bg-warning fw-bold" role="progressbar" 
+           style="width: {{ persentase_sma }}%" 
+           aria-valuenow="{{ sma }}" aria-valuemin="0" aria-valuemax="{{ total }}">
+        {{ persentase_sma }}%
+      </div>
+    </div>
+  </div></div>
+
+</div>
+
+<script>
+  new Chart(document.getElementById('genderChart'), {
+    type: 'pie',
+    data: {
+      labels: ['Laki-Laki', 'Perempuan'],
+      datasets: [{
+        data: [{{ laki|default(0) }}, {{ perempuan|default(0) }}],
+        backgroundColor: ['#28a745', '#dc3545']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('pendidikanChart'), {
+    type: 'bar',
+    data: {
+      labels: ['SD', 'SMP', 'SMA'],
+      datasets: [{
+        label: 'Jumlah',
+        data: [{{ sd|default(0) }}, {{ smp|default(0) }}, {{ sma|default(0) }}],
+        backgroundColor: ['#007bff', '#17a2b8', '#ffc107']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('usiaChart'), {
+    type: 'line',
+    data: {
+      labels: ['Anak-anak (0-12)', 'Remaja (13-19)', 'Dewasa (20-59)', 'Lansia (60+)'],
+      datasets: [{
+        label: 'Jumlah',
+        data: [{{ anak|default(0) }}, {{ remaja|default(0) }}, {{ dewasa|default(0) }}, {{ lansia|default(0) }}],
+        borderColor: '#007bff',
+        backgroundColor: 'rgba(0,123,255,0.2)',
+        tension: 0.3,
+        fill: true
+      }]
+    }
+  });
+</script>
+
+</body>
+</html>

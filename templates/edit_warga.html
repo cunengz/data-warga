@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>Edit Warga</h2>
+
+<form method="POST">
+
+<p>No KK</p>
+<input type="text" name="no_kk" value="{{ warga.no_kk }}">
+
+<p>NIK</p>
+<input type="text" name="nik" value="{{ warga.nik }}">
+
+<p>Nama</p>
+<input type="text" name="nama" value="{{ warga.nama }}">
+
+<p>Alamat</p>
+<input type="text" name="alamat" value="{{ warga.alamat }}">
+
+<p>Umur</p>
+<input type="number" name="umur" value="{{ warga.umur }}">
+
+<p>Tanggal Lahir</p>
+<input type="date" name="tanggal_lahir" value="{{ warga.tanggal_lahir }}">
+
+<p>Jenis Kelamin</p>
+<select name="jenis_kelamin">
+  <option value="Laki-laki" {{ "selected" if warga.jenis_kelamin == "Laki-laki" else "" }}>Laki-laki</option>
+  <option value="Perempuan" {{ "selected" if warga.jenis_kelamin == "Perempuan" else "" }}>Perempuan</option>
+</select>
+
+<p>Pekerjaan</p>
+<input type="text" name="pekerjaan" value="{{ warga.pekerjaan }}">
+
+<p>Pendidikan</p>
+<input type="text" name="pendidikan" value="{{ warga.pendidikan }}">
+
+<br><br>
+
+<button type="submit">
+Update
+</button>
+
+</form>
+
+{% endblock %}
