@@ -8,6 +8,10 @@ from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "admin123"
+
+# =========================
+# LOGIN REQUIRED DECORATOR
+# =========================
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -16,7 +20,9 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Konfigurasi database
+# =========================
+# KONFIGURASI DATABASE
+# =========================
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///warga.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -27,7 +33,7 @@ app.config['UPLOAD_FOLDER'] = 'static/ktp'
 db.init_app(app)
 
 # =========================
-# BUAT DATABASE
+# BUAT DATABASE & ADMIN DEFAULT
 # =========================
 with app.app_context():
     db.create_all()
@@ -38,27 +44,10 @@ with app.app_context():
         )
         db.session.add(admin)
         db.session.commit()
+
 # =========================
-# LOGIN
+# LOGIN ADMIN
 # =========================
-@app.route("/")
-def home():
-    data = Warga.query.all()
-    return render_template("warga_public.html", warga=data)
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-
-        admin = Admin.query.filter_by(username=username).first()
-
-        if admin and check_password_hash(admin.password, password):
-            session.clear()
-            session["admin"] = admin.username
-            return redirect(url_for("dashboard"))
-        else:
-            flash("Username atau password salah")
-
-    return render_template("login.html")
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "POST":
@@ -82,8 +71,6 @@ def login():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    if "admin" not in session:
-        return redirect("/")
     total = Warga.query.count()
     laki = Warga.query.filter_by(jenis_kelamin="Laki-Laki").count()
     perempuan = Warga.query.filter_by(jenis_kelamin="Perempuan").count()
@@ -95,26 +82,22 @@ def dashboard():
 @app.route("/warga")
 @login_required
 def warga():
-    if "admin" not in session:
-        return redirect("/")
     data = Warga.query.all()
     return render_template("admin/warga.html", warga=data)
 
 # =========================
-# Publik
+# ROOT REDIRECT KE LOGIN
 # =========================
-@app.route("/data-warga")
-def publik_warga():
-    data = Warga.query.all()
-    return render_template("warga_public.html", warga=data)
+@app.route("/")
+def home():
+    return redirect(url_for("login"))
+
 # =========================
 # TAMBAH WARGA
 # =========================
 @app.route("/tambah_warga")
 @login_required
 def tambah_warga():
-    if "admin" not in session:
-        return redirect("/")
     return render_template("admin/tambah_warga.html")
 
 # =========================
@@ -187,6 +170,7 @@ def hapus_warga(id):
 # STATISTIK
 # =========================
 @app.route("/statistik")
+@login_required
 def statistik():
     sql = text("""
         SELECT 

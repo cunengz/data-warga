@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Data Warga</title>
+</head>
+<body>
+
+<h2>Data Warga</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+<th>NIK</th>
+<th>Nama</th>
+<th>Tanggal Lahir</th>
+<th>Pekerjaan</th>
+<th>Pendidikan</th>
+</tr>
+
+{% for w in warga %}
+<tr>
+<td>{{ w.nik }}</td>
+<td>{{ w.nama }}</td>
+<td>{{ w.tanggal_lahir }}</td>
+<td>{{ w.pekerjaan }}</td>
+<td>{{ w.pendidikan }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/login">Login Admin</a>
+
+</body>
+</html>
