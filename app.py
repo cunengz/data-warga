@@ -41,7 +41,25 @@ with app.app_context():
 # =========================
 # LOGIN
 # =========================
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
+def home():
+    data = Warga.query.all()
+    return render_template("warga_public.html", warga=data)
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        admin = Admin.query.filter_by(username=username).first()
+
+        if admin and check_password_hash(admin.password, password):
+            session.clear()
+            session["admin"] = admin.username
+            return redirect(url_for("dashboard"))
+        else:
+            flash("Username atau password salah")
+
+    return render_template("login.html")
+@app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username")
@@ -83,6 +101,13 @@ def warga():
     return render_template("admin/warga.html", warga=data)
 
 # =========================
+# Publik
+# =========================
+@app.route("/data-warga")
+def publik_warga():
+    data = Warga.query.all()
+    return render_template("warga_public.html", warga=data)
+# =========================
 # TAMBAH WARGA
 # =========================
 @app.route("/tambah_warga")
@@ -96,6 +121,7 @@ def tambah_warga():
 # SIMPAN WARGA
 # =========================
 @app.route("/simpan_warga", methods=["POST"])
+@login_required
 def simpan_warga():
     data = Warga(
         no_kk=request.form['no_kk'],
@@ -115,6 +141,7 @@ def simpan_warga():
 # EDIT WARGA
 # =========================
 @app.route("/edit_warga/<int:id>", methods=["GET","POST"])
+@login_required
 def edit_warga(id):
     warga = Warga.query.get_or_404(id)
     if request.method == "POST":
@@ -131,6 +158,7 @@ def edit_warga(id):
 # UPDATE WARGA
 # =========================
 @app.route("/update_warga/<int:id>", methods=["POST"])
+@login_required
 def update_warga(id):
     data = Warga.query.get_or_404(id)
     data.no_kk = request.form['no_kk']
@@ -148,6 +176,7 @@ def update_warga(id):
 # HAPUS WARGA
 # =========================
 @app.route("/hapus_warga/<int:id>")
+@login_required
 def hapus_warga(id):
     warga = Warga.query.get_or_404(id)
     db.session.delete(warga)
